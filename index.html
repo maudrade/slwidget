@@ -143,7 +143,7 @@
             formData.append('reqtype', 'fileupload');
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'https://litterbox.catbox.moe/resources/internals/api.php', true);
+            xhr.open('POST', 'https://cors-anywhere.herokuapp.com/https://litterbox.catbox.moe/resources/internals/api.php', true);
 
             xhr.upload.onprogress = function(event) {
                 if (event.lengthComputable) {
