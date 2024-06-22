@@ -110,7 +110,7 @@
     <div class="container">
         <h1>File Upload HUD</h1>
         <input type="file" id="fileInput">
-        <label for="fileInput">Choose File</label>
+        <label for="fileInput" onclick="document.getElementById('status').textContent=''">Choose File</label>
         <br>
         <select id="expiryTime">
             <option value="1h">1 Hour</option>
@@ -157,9 +157,9 @@
                 }
 
                 const data = await response.text();
-                status.innerHTML = `File uploaded successfully! 
-                    <a href="${data}" target="_blank">View <img src="https://img.icons8.com/material-rounded/24/000000/external-link.png" class="icon" /></a> 
-                    <a href="#" onclick="copyToClipboard('${data}')">Copy Link <img src="https://img.icons8.com/material-rounded/24/000000/copy.png" class="icon" /></a>`;
+                status.innerHTML = `File uploaded successfully! <br>
+                   <a href="${data}" target="_blank"> <img src="https://img.icons8.com/material-rounded/24/000000/external-link.png" class="icon" /> View </a> 
+                    <a href="#" onclick="copyToClipboard('${data}')"><img src="https://img.icons8.com/material-rounded/24/000000/copy.png" class="icon" /> Copy Link </a>`;
             } catch (error) {
                 spinner.style.display = 'none';
                 status.textContent = 'Failed to upload file.';
