@@ -124,7 +124,7 @@
         <div class="status" id="status"></div>
     </div>
     <script>
-        function uploadFile() {
+        async function uploadFile() {
             const fileInput = document.getElementById('fileInput');
             const expiryTime = document.getElementById('expiryTime').value;
             const status = document.getElementById('status');
@@ -135,17 +135,36 @@
                 return;
             }
 
-            // Simulando um upload com setTimeout
-            spinner.style.display = 'block';
-            status.textContent = '';
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('fileToUpload', file);
+            formData.append('time', expiryTime);
+            formData.append('reqtype', 'fileupload');
 
-            setTimeout(() => {
+            try {
+                spinner.style.display = 'block';
+                status.textContent = '';
+
+                const response = await fetch('https://litterbox.catbox.moe/resources/internals/api.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
                 spinner.style.display = 'none';
-                const fakeURL = 'https://example.com/fake-url';
+
+                if (!response.ok) {
+                    throw new Error('Failed to upload file');
+                }
+
+                const data = await response.text();
                 status.innerHTML = `File uploaded successfully! 
-                    <a href="${fakeURL}" target="_blank">View <img src="https://img.icons8.com/material-rounded/24/000000/external-link.png" class="icon" /></a> 
-                    <a href="#" onclick="copyToClipboard('${fakeURL}')">Copy Link <img src="https://img.icons8.com/material-rounded/24/000000/copy.png" class="icon" /></a>`;
-            }, 3000); // Simula um upload que leva 3 segundos
+                    <a href="${data}" target="_blank">View <img src="https://img.icons8.com/material-rounded/24/000000/external-link.png" class="icon" /></a> 
+                    <a href="#" onclick="copyToClipboard('${data}')">Copy Link <img src="https://img.icons8.com/material-rounded/24/000000/copy.png" class="icon" /></a>`;
+            } catch (error) {
+                spinner.style.display = 'none';
+                status.textContent = 'Failed to upload file.';
+                console.error('Error:', error);
+            }
         }
 
         function copyToClipboard(text) {
